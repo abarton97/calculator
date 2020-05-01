@@ -63,9 +63,9 @@ body {
 }
 
 #buttons button#equals:hover {
-  background-color: #e398a2;
+  background-color: #e398a2!important;;
 }
 
 #buttons button:hover {
-  background-color: grey;
+  background-color: grey!important;;
 }
