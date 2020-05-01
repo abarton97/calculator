@@ -1,9 +1,10 @@
 var display = document.querySelector("#display");
 const buttons = document.querySelectorAll('#buttons');
+var divs = document.querySelectorAll('.operator');
 
 let total;
-let displayValue = "";
-let storedValue = "";
+let firstNumber = "";
+let secondNumber = "";
 let displayOperator = "";
 let storedOperator = "";
 let totalOperator = "";
@@ -13,8 +14,8 @@ let operatorPressed = false;
 let equalsPressed = false;
 
 function clearDisplay() {
-  displayValue = "";
-  storedValue = "";
+  firstNumber = "";
+  secondNumber = "";
   displayOperator = "";
   storedOperator = "";
   numberPressed = false;
@@ -38,26 +39,31 @@ function operatorTasks(operator = "", numA, numB) {
 
 function getOperators(e) {
   displayOperator = e.target.innerText;
-  if (displayOperator == '+' && numberPressed) {
+  if (!operatorPressed && displayOperator == '+' && numberPressed) {
+    divs[3].style.backgroundColor = "#cccccc";
     operatorPressed = true;
-    totalOperator = displayOperator
-  } else if (displayOperator == '÷' && numberPressed) {
+    totalOperator = displayOperator;
+  } else if (!operatorPressed && displayOperator == '÷' && numberPressed) {
+    divs[0].style.backgroundColor = "#cccccc";
     operatorPressed = true;
-    totalOperator = displayOperator
-  } else if (displayOperator == '×' && numberPressed) {
+    totalOperator = displayOperator;
+  } else if (!operatorPressed && displayOperator == '×' && numberPressed) {
+    divs[1].style.backgroundColor = "#cccccc";
     operatorPressed = true;
-    totalOperator = displayOperator
-  } else if (displayOperator == '-' && numberPressed) {
+    totalOperator = displayOperator;
+  } else if (!operatorPressed && displayOperator == '-' && numberPressed) {
+    divs[2].style.backgroundColor = "#cccccc";
     operatorPressed = true;
-    totalOperator = displayOperator
+    totalOperator = displayOperator;
   } else if (displayOperator == "=" && !equalsPressed && numberPressed) {
     total = operatorTasks(
       totalOperator,
-      Number(displayValue),
-      Number(storedValue));
+      Number(firstNumber),
+      Number(secondNumber));
     display.innerText = total;
-    displayValue = total;
-    storedValue = "";
+    operatorPressed = false;
+    firstNumber = total;
+    secondNumber = "";
   }
   let MAX_LENGTH = 9;
   if (display.innerText.length > MAX_LENGTH) {
@@ -66,44 +72,31 @@ function getOperators(e) {
   }
 }
 
-let remove = "";
-
 function getNumbers(e) {
   let negativePositive = e.target.innerText;
   if (!operatorPressed && !equalsPressed) {
     numberPressed = true;
     if (negativePositive == "+/-") {
-      displayValue = (-1) * Number(displayValue);
-      display.innerText = displayValue;
+      firstNumber = (-1) * Number(firstNumber);
+      display.innerText = firstNumber;
     }
-    if (displayValue.length <= 8) {
-      displayValue += e.target.innerText;
-      display.innerText = displayValue;
+    if (firstNumber.length <= 8) {
+      firstNumber += e.target.innerText;
+      display.innerText = firstNumber;
     }
   } else if (!equalsPressed && operatorPressed) {
     if (negativePositive == "+/-") {
-      storedValue = (-1) * Number(storedValue);
-      display.innerText = storedValue;
+      secondNumber = (-1) * Number(secondNumber);
+      display.innerText = secondNumber;
     }
-    if (storedValue.length <= 8) {
-      storedValue += e.target.innerText;
-      display.innerText = storedValue;
-      color = true;
-      console.log(displayColor)
+    if (secondNumber.length <= 8) {
+      secondNumber += e.target.innerText;
+      divs[0].style.backgroundColor = "white";
+      divs[1].style.backgroundColor = "white";
+      divs[2].style.backgroundColor = "white";
+      divs[3].style.backgroundColor = "white";
+      display.innerText = secondNumber;
     }
-  }
-}
-
-let displayColor = "";
-let color;
-
-function changeColors(e) {
-  displayColor = e.target.innerText;
-  if (operatorPressed && !color) {
-    this.style.backgroundColor = "red";
-    console.log(displayColor)
-  } else if (color) {
-    //displayColor.style.backgroundColor = "white";
   }
 }
 
@@ -115,6 +108,3 @@ operators.forEach((operator) => operator.addEventListener("click", getOperators)
 
 const clear = document.querySelectorAll(".clear");
 clear.forEach((clear) => clear.addEventListener("click", clearDisplay));
-
-const colorops = document.querySelectorAll(".operator");
-colorops.forEach((colorop) => colorop.addEventListener("click", changeColors));
